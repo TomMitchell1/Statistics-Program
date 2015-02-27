@@ -240,7 +240,48 @@ void confidenceInterval(tree t){
 
 //Prints out a 95% and 99% prediction interval for further 
 //data values. This does not need for the data to have at least 
-//40 data values to be accurate
+//40 data values to be accurate, however it is most accurate for large 
+//sets of data
 void predictionInterval(tree t){
-
+	int n= treeSize(t);
+	double mean=findMean(t);
+	double stdDeviation=findStdDeviation(t);
+	
+	double lowerLimit=0;
+	double upperLimit=0;
+	
+	
+	if(n>250){
+		lowerLimit= mean-T_SCORE_INFINITE_95_PERCENT*
+			(stdDeviation*sqrt(1+1/n));
+		upperLimit= mean+T_SCORE_INFINITE_95_PERCENT*
+			(stdDeviation*sqrt(1+1/n));	
+		printf("95%% prediction interval for the sample is: ");
+		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+		
+		lowerLimit= mean-T_SCORE_INFINITE_99_PERCENT*
+			(stdDeviation*sqrt(1+1/n));
+		upperLimit= mean+T_SCORE_INFINITE_99_PERCENT*
+			(stdDeviation*sqrt(1+1/n));	
+		printf("99%% prediction interval for the sample is: ");
+		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+		
+	} else {
+		// N of around 250
+		lowerLimit= mean-T_SCORE_250_95_PERCENT*
+			(stdDeviation*sqrt(1+1/n));
+		upperLimit= mean+T_SCORE_250_95_PERCENT*
+			(stdDeviation*sqrt(1+1/n));	
+		printf("95%% prediction interval for the sample is: ");
+		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+		
+		lowerLimit= mean-T_SCORE_250_99_PERCENT*
+			(stdDeviation*sqrt(1+1/n));
+		upperLimit= mean+T_SCORE_250_99_PERCENT*
+			(stdDeviation*sqrt(1+1/n));	
+		printf("99%% prediction interval for the sample is: ");
+		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+		
+		
+	}
 }

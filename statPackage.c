@@ -46,6 +46,7 @@ void treeTests(void){
 		printf("Sample median = %.2f\n",findMedian(t));
 		fiveNumberSummary(t);
 		confidenceInterval(t);
+		predictionInterval(t);
 		
 		
 		

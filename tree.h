@@ -47,4 +47,10 @@ void fiveNumberSummary(tree t);
 //the program is above 40.
 void confidenceInterval(tree t);
 
+//Prints out a 95% and 99% prediction interval for further 
+//data values. This does not need for the data to have at least 
+//40 data values to be accurate, however it is most accurate for large 
+//sets of data
+void predictionInterval(tree t);
+
 #endif
