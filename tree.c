@@ -250,38 +250,26 @@ void predictionInterval(tree t){
 	double lowerLimit=0;
 	double upperLimit=0;
 	
+	double tScore=0;
 	
 	if(n>250){
-		lowerLimit= mean-T_SCORE_INFINITE_95_PERCENT*
-			(stdDeviation*sqrt(1+1/n));
-		upperLimit= mean+T_SCORE_INFINITE_95_PERCENT*
-			(stdDeviation*sqrt(1+1/n));	
-		printf("95%% prediction interval for the sample is: ");
-		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
-		
-		lowerLimit= mean-T_SCORE_INFINITE_99_PERCENT*
-			(stdDeviation*sqrt(1+1/n));
-		upperLimit= mean+T_SCORE_INFINITE_99_PERCENT*
-			(stdDeviation*sqrt(1+1/n));	
-		printf("99%% prediction interval for the sample is: ");
-		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
-		
+		tScore=T_SCORE_INFINITE_95_PERCENT;
 	} else {
-		// N of around 250
-		lowerLimit= mean-T_SCORE_250_95_PERCENT*
-			(stdDeviation*sqrt(1+1/n));
-		upperLimit= mean+T_SCORE_250_95_PERCENT*
-			(stdDeviation*sqrt(1+1/n));	
-		printf("95%% prediction interval for the sample is: ");
-		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
-		
-		lowerLimit= mean-T_SCORE_250_99_PERCENT*
-			(stdDeviation*sqrt(1+1/n));
-		upperLimit= mean+T_SCORE_250_99_PERCENT*
-			(stdDeviation*sqrt(1+1/n));	
-		printf("99%% prediction interval for the sample is: ");
-		printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
-		
-		
+		tScore=T_SCORE_250_95_PERCENT;	
 	}
+	lowerLimit= mean-tScore* (stdDeviation*sqrt(1+1/n));
+	upperLimit= mean+tScore*(stdDeviation*sqrt(1+1/n));	
+	printf("95%% prediction interval for the sample is: ");
+	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+	
+	if(n>250){
+		tScore=T_SCORE_INFINITE_99_PERCENT;
+	} else {
+		tScore=T_SCORE_250_99_PERCENT;	
+	}
+		
+	lowerLimit= mean-tScore*(stdDeviation*sqrt(1+1/n));
+	upperLimit= mean+tScore*(stdDeviation*sqrt(1+1/n));	
+	printf("99%% prediction interval for the sample is: ");
+	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
 }
