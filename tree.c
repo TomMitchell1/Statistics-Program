@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <math.h>
 #include "tree.h"
 
 typedef struct _node *Link;
@@ -68,7 +69,7 @@ tree insertNode(tree t, double v) {
 	return t;
 }
 
-// display a BSTree (sideways)
+// display the tree sideways on the terminal
 static void doShowTree(tree t, int level){
 	int i;
 	if (t != NULL){  
@@ -83,10 +84,12 @@ static void doShowTree(tree t, int level){
 	}	
 }
 
+//Prints out the tree for error testing
 void showTree(tree t) {
 	doShowTree(t, 0);
 }
 
+//Finds the mean value for data in the tree.
 double findMean(tree t){
 	assert(t!=NULL);
 	double sum = treeSum(t);
@@ -95,6 +98,7 @@ double findMean(tree t){
 	return mean; 
 }
 
+//Finds the total sum of all data in the tree
 static double treeSum(tree t){
 	if(t == NULL){
 		return 0;
@@ -103,7 +107,8 @@ static double treeSum(tree t){
 	}	
 }
 
-double findVar(tree t){
+//Finds the variance of the data in the tree
+double findVariance(tree t){
 	assert(t!=NULL);
 	int n=treeSize(t);
 	double mean=findMean(t);
@@ -115,11 +120,16 @@ static double treeVariance(tree t,double mean){
 	if(t == NULL){
 		return 0;
 	} else {
-		return (t->value-mean)*(t->value-mean) + treeVariance(t->left, mean) + treeVariance(t->right, mean);
+		return pow(t->value-mean,2) + treeVariance(t->left, mean) + treeVariance(t->right, mean);
 	}
 }
 
-//Find the median of the tree
+//Find the standard deviation of the data in the tree.
+double findStdDeviation(tree t){
+	return sqrt(findVariance(t));
+}
+
+//Find the median of the tree.
 double findMedian(tree t){
 	assert(t!=NULL);
 	int n=treeSize(t);
@@ -134,7 +144,7 @@ double findMedian(tree t){
 	return median;
 }	
 
-//Find the value of a given node	
+//Find the value of a given node.	
 static double findNodeValue(tree t,int nodeNum){
 	assert(t!=NULL);
 	if(treeSize(t->left)+1 == nodeNum){
@@ -146,7 +156,7 @@ static double findNodeValue(tree t,int nodeNum){
 	}
 }
 
-//Find the lower quartile of the data in the tree
+//Find the lower quartile of the data in the tree.
 static double findLowerQuartile(tree t){
 	assert(t!=NULL);
 	int n=treeSize(t);
@@ -165,7 +175,7 @@ static double findLowerQuartile(tree t){
 	return lowerQuartile;	
 }
 
-//Find the upper quartile of the data in the tree
+//Find the upper quartile of the data in the tree.
 static double findUpperQuartile(tree t){
 	assert(t!=NULL);
 	int n=treeSize(t);
@@ -183,27 +193,54 @@ static double findUpperQuartile(tree t){
 	return upperQuartile;	
 }
 
-//returns the smallest value in the tree
+//returns the smallest value in the tree.
 static double findSmallestValue(tree t){
 	assert(t!=NULL);
 	return findNodeValue(t,1);
 	
 }
 
-//returns the largest value in the tree
+//returns the largest value in the tree.
 static double findLargestValue(tree t){
 	assert(t!=NULL);
 	return findNodeValue(t,treeSize(t));
 }
 
-//Prints out the 5 number summary of the data in the tree
+//Prints out the 5 number summary of the data in the tree.
 void fiveNumberSummary(tree t){
-	printf("Five number summary is: [");
+	double quartile1 = findLowerQuartile(t);
+	double quartile3 = findUpperQuartile(t);
+	printf("Sample five number summary is: [");
 	printf("%.2f,",findSmallestValue(t));
 	printf("%.2f,",findLowerQuartile(t));
 	printf("%.2f,",findMedian(t));
 	printf("%.2f,",findUpperQuartile(t));
 	printf("%.2f]\n",findLargestValue(t));
+	printf("Sample interquartile range: %.2f\n",quartile3-quartile1);
 
+}
+
+//Prints out a 95% and 99% confidence interval for the data tree
+//This assumes that the number of data points imported into
+//the program is above 40, otherwise it will not be as accurate
+void confidenceInterval(tree t){
+	int n= treeSize(t);
+	double mean=findMean(t);
+	double stdDeviation=findStdDeviation(t);
+	double lowerLimit= mean-Z_SCORE_95_PERCENT*(stdDeviation/sqrt(n));
+	double upperLimit= mean+Z_SCORE_95_PERCENT*(stdDeviation/sqrt(n));
+	printf("95%% confidence interval for the sample is: ");
+	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+	
+	lowerLimit= mean-Z_SCORE_99_PERCENT*(stdDeviation/sqrt(n));
+	upperLimit= mean+Z_SCORE_99_PERCENT*(stdDeviation/sqrt(n));
+	printf("99%% confidence interval for the sample is: ");
+	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+}
+
+//Prints out a 95% and 99% prediction interval for further 
+//data values. This does not need for the data to have at least 
+//40 data values to be accurate
+void predictionInterval(tree t){
 
 }

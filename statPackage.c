@@ -37,11 +37,19 @@ void treeTests(void){
 	//assert(findMean(t)==5.25);
 	//assert(findMedian(t)==5.5);
 	if(t!=NULL){
+		
+		//Print out the statistical information
 		printf("Number of data points is %d\n",treeSize(t));
-		printf("Mean = %.2f\n",findMean(t));
-		printf("Variance = %.2f\n",findVar(t));
-		printf("Median is %.2f\n",findMedian(t));
+		printf("Sample mean = %.2f\n",findMean(t));
+		printf("Sample variance = %.2f\n",findVariance(t));
+		printf("Sample standard deviation = %.2f\n",findStdDeviation(t));
+		printf("Sample median = %.2f\n",findMedian(t));
 		fiveNumberSummary(t);
+		confidenceInterval(t);
+		
+		
+		
+		
 		//Test freeing memory that the tree uses
 		t=destroyTree(t);
 		assert(treeSize(t)==0);
