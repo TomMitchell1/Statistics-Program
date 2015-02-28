@@ -3,8 +3,17 @@
 
 typedef struct _node *tree;
 
-#define Z_SCORE_95_PERCENT 1.96
-#define Z_SCORE_99_PERCENT 2.575
+typedef int bool;
+#define TRUE 1
+#define FALSE 0
+
+
+//For 2 sided confidence intervals
+#define Z_SCORE_95_PERCENT_2_SIDED 1.96
+#define Z_SCORE_99_PERCENT_2_SIDED 2.575
+
+#define Z_SCORE_95_PERCENT_1_SIDED 1.645
+#define Z_SCORE_99_PERCENT_1_SIDED 2.33
 
 //Used for 95% prediction interval with t distribution
 #define T_SCORE_1_95_PERCENT 6.314
@@ -153,4 +162,7 @@ void confidenceInterval(tree t);
 //sets of data
 void predictionInterval(tree t);
 
+//Given a tree and a type of hypothesis test, this function with return a 
+//boolean saying whether or not to reject the null hypothesis
+bool hypothesisTesting(tree t,char c,double hypothesis);
 #endif

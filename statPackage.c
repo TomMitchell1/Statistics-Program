@@ -4,7 +4,6 @@
 #include <math.h>
 #include "tree.h"
 
-
 void treeTests(void);
 
 int main( int argc, char* argv[]) {
@@ -15,6 +14,8 @@ int main( int argc, char* argv[]) {
 }
 
 void treeTests(void){
+	double hypothesis=0;
+	char hypothesisTestType='0';
 	//Test tree construction
 	tree t=newTree();
 	//Test adding to the tree
@@ -34,6 +35,7 @@ void treeTests(void){
 	t=insertNode(t,8);
 	assert(treeSize(t)==7);
 	showTree(t);
+	
 	
 	assert(round(findMean(t) * 100) / 100==5.71);
 	//assert(findMedian(t)==5.5);
@@ -89,6 +91,39 @@ void treeTests(void){
 		confidenceInterval(t);
 		predictionInterval(t);
 		
+		printf("Please enter a claimed average for hypothesis testing:");
+		scanf("%lf",&hypothesis);
+		
+		printf("\nWhat sort of hypothesis test would you like to use?\n");
+		printf("Please type a,b,c for the type of hypothesis test:\n\n");
+		printf("  a)  Two-sided alternative test\n");
+		printf("  b)  One-sided alternative test: ");
+		printf("sample mean is not greater than hypothesis\n");
+		printf("  c)  One-sided alternative test: ");
+		printf("sample mean is not less than hypothesis\n\n");
+		
+		printf("Hypothesis test: ");
+		scanf(" %c",&hypothesisTestType);
+		
+		printf("\n");
+		
+		if(hypothesisTesting(t,hypothesisTestType,hypothesis)==TRUE){
+			printf("The hypothesis should be rejected\n");
+			printf(" at a significance level of 0.05.\n");
+			if(hypothesisTestType=='a'){
+				printf("Using a two-sided alternative test.\n");
+			} else {
+				printf("Using a one-sided alternative test.\n");
+			}
+		} else {
+			printf("The hypothesis should not be rejected");
+			printf(" at a significance level of 0.05.\n");
+			if(hypothesisTestType=='a'){
+				printf("Using a two-sided alternative test.\n");
+			} else {
+				printf("Using a one-sided alternative test.\n");
+			}
+		}
 		
 		
 		

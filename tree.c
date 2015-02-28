@@ -23,7 +23,8 @@ static double findLowerQuartile(tree t);
 static double findUpperQuartile(tree t);
 static double determineTScore95(int n);
 static double determineTScore99(int n);
-
+static bool twoSidedHypothesisTest (tree t,double hypothesis);
+static bool oneSidedHypothesisTest (tree t,char c, double hypothesis);
 // make a new node containing a value
 static Link newNode(double v) {
 	Link new = malloc(sizeof(node));
@@ -229,13 +230,13 @@ void confidenceInterval(tree t){
 	int n= treeSize(t);
 	double mean=findMean(t);
 	double stdDeviation=findStdDeviation(t);
-	double lowerLimit= mean-Z_SCORE_95_PERCENT*(stdDeviation/sqrt(n));
-	double upperLimit= mean+Z_SCORE_95_PERCENT*(stdDeviation/sqrt(n));
+	double lowerLimit= mean-Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	double upperLimit= mean+Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
 	printf("95%% confidence interval for the sample is: ");
 	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
 	
-	lowerLimit= mean-Z_SCORE_99_PERCENT*(stdDeviation/sqrt(n));
-	upperLimit= mean+Z_SCORE_99_PERCENT*(stdDeviation/sqrt(n));
+	lowerLimit= mean-Z_SCORE_99_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	upperLimit= mean+Z_SCORE_99_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
 	printf("99%% confidence interval for the sample is: ");
 	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
 }
@@ -482,4 +483,51 @@ static double determineTScore99(int n){
 		score=T_SCORE_INFINITE_99_PERCENT;
 	}
 	return score;
+}
+
+//Given a tree and a type of hypothesis test, this function with return a 
+//boolean saying whether or not to reject the null hypothesis
+bool hypothesisTesting(tree t,char c,double hypothesis){
+	bool reject=FALSE;
+	
+	if(c=='a'){
+		//Then the test to use is a two sided alternative
+		reject=twoSidedHypothesisTest (t,hypothesis);
+	} else {
+		reject=oneSidedHypothesisTest (t,c,hypothesis);
+	}
+	return reject;
+}
+
+static bool twoSidedHypothesisTest (tree t,double hypothesis){
+	bool reject=FALSE;
+	int n=treeSize(t);
+	double mean=findMean(t);
+	double stdDeviation=sqrt(findVariance(t));
+	double lowerLimit= hypothesis-Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	double upperLimit= hypothesis+Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	if(mean <lowerLimit || mean > upperLimit){
+		reject =TRUE;
+	}
+	return reject;
+}
+
+static bool oneSidedHypothesisTest (tree t,char c, double hypothesis){
+	bool reject=FALSE;
+	int n=treeSize(t);
+	double mean=findMean(t);
+	double stdDeviation=sqrt(findVariance(t));
+	double lowerLimit= hypothesis-Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	double upperLimit= hypothesis+Z_SCORE_95_PERCENT_2_SIDED*(stdDeviation/sqrt(n));
+	if(c == 'b'){
+		if(mean >upperLimit){
+			reject =TRUE;
+		}
+	} else {
+		//char is c	
+		if(mean <lowerLimit){
+			reject =TRUE;
+		}
+	}	
+	return reject;
 }
