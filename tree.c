@@ -21,6 +21,8 @@ static double findSmallestValue(tree t);
 static double findLargestValue(tree t);
 static double findLowerQuartile(tree t);
 static double findUpperQuartile(tree t);
+static double determineTScore95(int n);
+static double determineTScore99(int n);
 
 // make a new node containing a value
 static Link newNode(double v) {
@@ -62,7 +64,7 @@ int treeSize(tree t) {
 tree insertNode(tree t, double v) {
 	if (t == NULL)
 		t = newNode(v);
-	else if (v < t->value)
+	else if (v <= t->value)
 		t->left = insertNode(t->left, v);
 	else if (v > t->value)
 		t->right = insertNode(t->right, v);
@@ -250,26 +252,234 @@ void predictionInterval(tree t){
 	double lowerLimit=0;
 	double upperLimit=0;
 	
-	double tScore=0;
+	double tScore=determineTScore95(n-1); //n-1 as 1 less degrees of freedom
 	
-	if(n>250){
-		tScore=T_SCORE_INFINITE_95_PERCENT;
-	} else {
-		tScore=T_SCORE_250_95_PERCENT;	
-	}
+	
 	lowerLimit= mean-tScore* (stdDeviation*sqrt(1+1/n));
 	upperLimit= mean+tScore*(stdDeviation*sqrt(1+1/n));	
 	printf("95%% prediction interval for the sample is: ");
 	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
 	
-	if(n>250){
-		tScore=T_SCORE_INFINITE_99_PERCENT;
-	} else {
-		tScore=T_SCORE_250_99_PERCENT;	
-	}
+	tScore=determineTScore99(n-1); //n-1 as 1 less degrees of freedom
 		
 	lowerLimit= mean-tScore*(stdDeviation*sqrt(1+1/n));
 	upperLimit= mean+tScore*(stdDeviation*sqrt(1+1/n));	
 	printf("99%% prediction interval for the sample is: ");
 	printf("[%.2f,%.2f]\n",lowerLimit,upperLimit);
+}
+
+//Given the number of data points this function will return the correct t value 
+//for a 95% confidence interval
+static double determineTScore95(int n){
+	double score=0;
+	if(n==1){
+		score=T_SCORE_1_95_PERCENT;
+	} else if(n==2){
+		score=T_SCORE_2_95_PERCENT;
+	} else if(n==3){
+		score=T_SCORE_3_95_PERCENT;
+	} else if(n==4){
+		score=T_SCORE_4_95_PERCENT;
+	} else if(n==5){
+		score=T_SCORE_5_95_PERCENT;
+	} else if(n==6){	
+		score=T_SCORE_6_95_PERCENT;
+	} else if(n==7){
+		score=T_SCORE_7_95_PERCENT;
+	} else if(n==8){
+		score=T_SCORE_8_95_PERCENT;
+	} else if(n==9){
+		score=T_SCORE_9_95_PERCENT;
+	} else if(n==10){
+		score=T_SCORE_10_95_PERCENT;		
+	} else if(n==11){
+		score=T_SCORE_11_95_PERCENT;
+	} else if(n==12){
+		score=T_SCORE_12_95_PERCENT;
+	} else if(n==13){
+		score=T_SCORE_13_95_PERCENT;
+	} else if(n==14){
+		score=T_SCORE_14_95_PERCENT;
+	} else if(n==15){
+		score=T_SCORE_15_95_PERCENT;
+	} else if(n==16){
+		score=T_SCORE_16_95_PERCENT;
+	} else if(n==17){
+		score=T_SCORE_17_95_PERCENT;	
+	} else if(n==18){
+		score=T_SCORE_18_95_PERCENT;
+	} else if(n==19){
+		score=T_SCORE_19_95_PERCENT;
+	} else if(n==20){
+		score=T_SCORE_20_95_PERCENT;
+	} else if(n==21){
+		score=T_SCORE_21_95_PERCENT;
+	} else if(n==22){
+		score=T_SCORE_22_95_PERCENT;
+	} else if(n==23){
+		score=T_SCORE_23_95_PERCENT;
+	} else if(n==24){
+		score=T_SCORE_24_95_PERCENT;
+	} else if(n==25){
+		score=T_SCORE_25_95_PERCENT;
+	} else if(n==26){
+		score=T_SCORE_26_95_PERCENT;
+	} else if(n==27){
+		score=T_SCORE_27_95_PERCENT;
+	} else if(n==28){
+		score=T_SCORE_28_95_PERCENT;
+	} else if(n==29){
+		score=T_SCORE_29_95_PERCENT;
+	} else if(n==30){
+		score=T_SCORE_30_95_PERCENT;
+	} else if(n==31){
+		score=T_SCORE_31_95_PERCENT;
+	} else if(n==32){
+		score=T_SCORE_32_95_PERCENT;
+	} else if(n==33){
+		score=T_SCORE_33_95_PERCENT;
+	} else if(n==34){
+		score=T_SCORE_34_95_PERCENT;
+	} else if(n==35){
+		score=T_SCORE_35_95_PERCENT;
+	} else if(n==36){
+		score=T_SCORE_36_95_PERCENT;
+	} else if(n==37){
+		score=T_SCORE_37_95_PERCENT;
+	} else if(n==38){
+		score=T_SCORE_38_95_PERCENT;
+	} else if(n==39){
+		score=T_SCORE_39_95_PERCENT;
+	} else if(n==40){
+		score=T_SCORE_40_95_PERCENT;
+	} else if(n<=60){
+		score=T_SCORE_60_95_PERCENT;
+	} else if(n<=80){
+		score=T_SCORE_80_95_PERCENT;
+	} else if(n<=100){
+		score=T_SCORE_100_95_PERCENT;
+	} else if(n<=120){
+		score=T_SCORE_120_95_PERCENT;
+	} else if(n<=140){
+		score=T_SCORE_140_95_PERCENT;
+	} else if(n<=160){
+		score=T_SCORE_160_95_PERCENT;
+	} else if(n<=180){
+		score=T_SCORE_180_95_PERCENT;
+	} else if(n<=200){
+		score=T_SCORE_200_95_PERCENT;
+	} else if(n<=250){
+		score=T_SCORE_250_95_PERCENT;
+	} else {
+		score=T_SCORE_INFINITE_95_PERCENT;
+	}
+	return score;
+}
+
+//Given the number of data points this function will return the correct t value 
+//for a 99% confidence interval
+static double determineTScore99(int n){
+	double score=0;
+	if(n==1){
+		score=T_SCORE_1_99_PERCENT;
+	} else if(n==2){
+		score=T_SCORE_2_99_PERCENT;
+	} else if(n==3){
+		score=T_SCORE_3_99_PERCENT;
+	} else if(n==4){
+		score=T_SCORE_4_99_PERCENT;
+	} else if(n==5){
+		score=T_SCORE_5_99_PERCENT;
+	} else if(n==6){	
+		score=T_SCORE_6_99_PERCENT;
+	} else if(n==7){
+		score=T_SCORE_7_99_PERCENT;
+	} else if(n==8){
+		score=T_SCORE_8_99_PERCENT;
+	} else if(n==9){
+		score=T_SCORE_9_99_PERCENT;
+	} else if(n==10){
+		score=T_SCORE_10_99_PERCENT;		
+	} else if(n==11){
+		score=T_SCORE_11_99_PERCENT;
+	} else if(n==12){
+		score=T_SCORE_12_99_PERCENT;
+	} else if(n==13){
+		score=T_SCORE_13_99_PERCENT;
+	} else if(n==14){
+		score=T_SCORE_14_99_PERCENT;
+	} else if(n==15){
+		score=T_SCORE_15_99_PERCENT;
+	} else if(n==16){
+		score=T_SCORE_16_99_PERCENT;
+	} else if(n==17){
+		score=T_SCORE_17_99_PERCENT;	
+	} else if(n==18){
+		score=T_SCORE_18_99_PERCENT;
+	} else if(n==19){
+		score=T_SCORE_19_99_PERCENT;
+	} else if(n==20){
+		score=T_SCORE_20_99_PERCENT;
+	} else if(n==21){
+		score=T_SCORE_21_99_PERCENT;
+	} else if(n==22){
+		score=T_SCORE_22_99_PERCENT;
+	} else if(n==23){
+		score=T_SCORE_23_99_PERCENT;
+	} else if(n==24){
+		score=T_SCORE_24_99_PERCENT;
+	} else if(n==25){
+		score=T_SCORE_25_99_PERCENT;
+	} else if(n==26){
+		score=T_SCORE_26_99_PERCENT;
+	} else if(n==27){
+		score=T_SCORE_27_99_PERCENT;
+	} else if(n==28){
+		score=T_SCORE_28_99_PERCENT;
+	} else if(n==29){
+		score=T_SCORE_29_99_PERCENT;
+	} else if(n==30){
+		score=T_SCORE_30_99_PERCENT;
+	} else if(n==31){
+		score=T_SCORE_31_99_PERCENT;
+	} else if(n==32){
+		score=T_SCORE_32_99_PERCENT;
+	} else if(n==33){
+		score=T_SCORE_33_99_PERCENT;
+	} else if(n==34){
+		score=T_SCORE_34_99_PERCENT;
+	} else if(n==35){
+		score=T_SCORE_35_99_PERCENT;
+	} else if(n==36){
+		score=T_SCORE_36_99_PERCENT;
+	} else if(n==37){
+		score=T_SCORE_37_99_PERCENT;
+	} else if(n==38){
+		score=T_SCORE_38_99_PERCENT;
+	} else if(n==39){
+		score=T_SCORE_39_99_PERCENT;
+	} else if(n==40){
+		score=T_SCORE_40_99_PERCENT;
+	} else if(n<=60){
+		score=T_SCORE_60_99_PERCENT;
+	} else if(n<=80){
+		score=T_SCORE_80_99_PERCENT;
+	} else if(n<=100){
+		score=T_SCORE_100_99_PERCENT;
+	} else if(n<=120){
+		score=T_SCORE_120_99_PERCENT;
+	} else if(n<=140){
+		score=T_SCORE_140_99_PERCENT;
+	} else if(n<=160){
+		score=T_SCORE_160_99_PERCENT;
+	} else if(n<=180){
+		score=T_SCORE_180_99_PERCENT;
+	} else if(n<=200){
+		score=T_SCORE_200_99_PERCENT;
+	} else if(n<=250){
+		score=T_SCORE_250_99_PERCENT;
+	} else {
+		score=T_SCORE_INFINITE_99_PERCENT;
+	}
+	return score;
 }
