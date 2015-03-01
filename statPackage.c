@@ -20,7 +20,12 @@
 	
 	Tests for mean,variance and standard deviation were done in test function.
 	The tests for the 5 number summary and confidence intervals were done by
-	checking the results against the results from matlab
+	checking the results against the results from matlab.
+	
+	For confidence intervals and hypothesis testing are based off calculations
+	on the mean on an arbitrary distribution where it is not known if the sample
+	came from a normally distribution population. This can be approximated by a 
+	normal distribution if the number of data points is large enough n>40.
 		
 */
 #include <stdio.h>
@@ -30,6 +35,11 @@
 #include <string.h>
 #include "tree.h"
 
+#define CORRECT_NUMBER_OF_ARGS 2
+#define FILE_ARGUEMENT 1
+#define MAX_STRING_SIZE 3
+#define STRINGS_EQUAL 0
+
 tree importData(char* string);
 void treeTests(void);
 void stats(tree t);
@@ -37,8 +47,8 @@ void stats(tree t);
 int main( int argc, char* argv[]) {
 	tree t;
 	//treeTests();
-	if ( argc == 2 ){
-		t=importData(argv[1]);
+	if ( argc == CORRECT_NUMBER_OF_ARGS ){
+		t=importData(argv[FILE_ARGUEMENT]);
 		stats(t);
 	} else {
 		printf("Did not give a file name.\n");
@@ -191,7 +201,7 @@ tree importData(char* string){
 }
 
 void stats(tree t){
-	char string[3];
+	char string[MAX_STRING_SIZE];
 	double hypothesis=0;
 	char hypothesisTestType='0';
 	if(t!=NULL){
@@ -206,7 +216,7 @@ void stats(tree t){
 		printf("Would you like to test hypotheses?\n");
 		printf("yes or no: "); 
 		scanf("%s",string);
-		while(strcmp (string,"yes") == 0){
+		while(strcmp (string,"yes") == STRINGS_EQUAL){
 		
 			printf("Please enter a claimed average for hypothesis testing:");
 			scanf("%lf",&hypothesis);
